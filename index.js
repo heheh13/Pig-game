@@ -8,13 +8,18 @@ GAME RULES:
 */
 
 let scores = ['first','second'];
-let roundScore = 0;
-let activePlayer = 0;
+let roundScore,activePlayer;
 
-document.getElementById("first-player-round-score").textContent ='0';
-document.getElementById("first-player-global-score").textContent ='0';
-document.getElementById("second-player-round-score").textContent ='0';
-document.getElementById("second-player-global-score").textContent ='0';
+function resetEverything(){
+    roundScore = 0;
+    activePlayer = 0;    
+    document.getElementById("first-player-round-score").textContent ='0';
+    document.getElementById("first-player-global-score").textContent ='0';
+    document.getElementById("second-player-round-score").textContent ='0';
+    document.getElementById("second-player-global-score").textContent ='0';
+    
+}
+resetEverything();
 
 
 
@@ -53,13 +58,8 @@ document.querySelector(".roll-dice").addEventListener("click",function(){
     else{
         //alternate
         updateRoundScore.textContent = '0'; 
-        activePlayer ^=1;
-        roundScore = 0;
-        document.querySelector(".player-0-panel").classList.toggle('active');
-        document.querySelector(".player-1-panel").classList.toggle('active');
-
+      next_player();
     }
-
 })
 
 document.querySelector(".hold").addEventListener("click",function(){
@@ -68,17 +68,34 @@ document.querySelector(".hold").addEventListener("click",function(){
     updateRoundScore.textContent = '0';
     var updateGlobalScore = document.getElementById(scores[activePlayer]+'-player-global-score');
     updateGlobalScore.textContent = parseInt(updateGlobalScore.textContent)+roundScore;
-    if (parseInt(updateGlobalScore.textContent)>=10){
+
+    if (parseInt(updateGlobalScore.textContent)>=100){
         document.querySelector(".player-"+activePlayer+"-panel").classList.add('winner');
         document.getElementById(scores[activePlayer]+'-player-round-score').innerHTML = '<h3>Winner</h3>'
-        
+        document.querySelector(".dice").style.display = "none";
     }
+    else next_player();
+
+});
+function next_player(){
     ///reset round score
     ///alternatee turn
     activePlayer^=1;
     roundScore = 0;
     document.querySelector(".player-0-panel").classList.toggle('active');
     document.querySelector(".player-1-panel").classList.toggle('active');
+    
+}
+document.querySelector(".new-game").addEventListener("click",function(){
+    //new game resets everything
+    console.log(activePlayer);
+     document.querySelector(".player-"+activePlayer+"-panel").classList.remove('winner');
+    document.getElementById(scores[activePlayer]+'-player-round-score').innerHTML = '0';
+    document.querySelector(".dice").style.display = "none";
+    resetEverything();
+    
+   
+
 
 });
 
